@@ -302,7 +302,7 @@ type layoutComponent;
 external layoutComponent:
   (
     ~id: string=?,
-    ~name: string=?,
+    ~name: Screens.t=?,
     ~options: navigationOptions=?,
     ~passProps: props('a)=?,
     unit
@@ -434,11 +434,16 @@ type rootOptions = {
   root: stackOptions,
 };
 
+type componentProvider('a) = unit => React.component('a);
+
 [@bs.module "react-native-navigation"] [@bs.scope "Navigation"]
-external register: (string, 'a) => React.element = "registerComponent";
+external registerScreen: (Screens.t, 'a) => React.element = "registerComponent";
 [@bs.module "react-native-navigation"] [@bs.scope "Navigation"]
-external registerComponent: (string, 'a) => React.element =
+external registerComponent2: ('a, React.component('a)) => componentProvider('a) => unit =
   "registerComponent";
+[@bs.module "react-native-navigation"] [@bs.scope "Navigation"]
+external registerComponent: (string, 'a) => React.element = "registerComponent";
+
 [@bs.module "react-native-navigation"] [@bs.scope "Navigation"]
 external setRoot: 'a => Js.Promise.t(unit) = "setRoot";
 [@bs.module "react-native-navigation"] [@bs.scope "Navigation"]
@@ -456,3 +461,4 @@ external _registerAppLaunchedListener: (events, unit => unit) => unit =
 
 let onAppLaunched = (f: unit => unit) =>
   events()->_registerAppLaunchedListener(f);
+

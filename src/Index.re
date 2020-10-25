@@ -1,22 +1,16 @@
-
-
+let options =
+  Navigation.navigationOptions(
+    ~animations=
+      Navigation.optionsAnimations(
+        ~setRoot=Navigation.waitForRender(~waitForRender=true, ()),
+        (),
+      ),
+    (),
+  );
 let welcomeScreen: Navigation.layoutStackChildren =
   Navigation.(
     layoutStackChildren(
-      ~component=
-        layoutComponent(
-          ~name="com.myApp.WelcomeScreen",
-          ~options=
-            navigationOptions(
-              ~animations=
-                optionsAnimations(
-                  ~setRoot=waitForRender(~waitForRender=true, ()),
-                  (),
-                ),
-              (),
-            ),
-          (),
-        ),
+      ~component=Navigation.layoutComponent(~name=`Demo_Home, ~options, ()),
     )
   );
 
@@ -44,6 +38,10 @@ let root =
       (),
     )
   );
-
-Navigation.registerComponent("com.myApp.WelcomeScreen", () => App.app);
-Navigation.onAppLaunched(() => Navigation.setRoot(root)->ignore);
+RegisterScreens.register()
+// Navigation.registerComponent("com.myApp.WelcomeScreen", () => App.app);
+// Navigation.registerScreen(`Demo_Home, () => Home.make);
+Navigation.onAppLaunched(() => {
+  SetDefaultOptions.setDefaultOptions();
+  Navigation.setRoot(root)->ignore;
+});
